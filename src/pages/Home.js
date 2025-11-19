@@ -6,9 +6,9 @@ import Card from "../components/Card";
 import { cardData } from "../components/Data";
 
 const Home = () => {
-  console.log("Home component rendered", cardData);
+  // console.log("Home component rendered", cardData);
   const handleCardPress = (item) => {
-    console.log(`Pressed: ${item.name}`);
+    // console.log(`Pressed: ${item.name}`);
   };
   const renderCard = ({ item }) => (
     <Card item={item} onPress={() => handleCardPress(item)} />
@@ -21,7 +21,7 @@ const Home = () => {
         data={cardData}
         renderItem={renderCard}
         keyExtractor={(item) => item.id.toString()}
-        numColumns={3}
+        numColumns={2}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={styles.columnWrapper}
