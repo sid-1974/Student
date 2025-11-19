@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.sid_1974.Attendence"
     },
     "web": {
       "favicon": "./assets/favicon.png"
