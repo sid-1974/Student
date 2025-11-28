@@ -4,10 +4,13 @@ import Button from '../components/Button';
 import Colors from "../config/Colors";
 import Card from "../components/Card";
 import { cardData } from "../components/Data";
+import { navigate } from "../navigation/navigationRef";
 
 const Home = () => {
+  const navigation = useNavigation();
   // console.log("Home component rendered", cardData);
   const handleCardPress = (item) => {
+    navigate(item.route);
     // console.log(`Pressed: ${item.name}`);
   };
   const renderCard = ({ item }) => (

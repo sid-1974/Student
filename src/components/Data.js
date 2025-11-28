@@ -15,7 +15,7 @@ export const cardData = [
     icon: "✅",
     iconName: "check-circle",
     color: Colors.background,
-    route: "Attendance"
+    route: "Attendence"
   },
   {
     id: 3,

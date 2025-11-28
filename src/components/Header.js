@@ -1,11 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
 import Colors from "../config/Colors";
 import Button from "../components/Button";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
+import { navigate } from "../navigation/navigationRef";
+import { useAuth } from "../context/AuthContext";
 
-
-const Header = ({ navigation, options }) => {
+const Header = ({  options }) => {
+  const { logoutUser, userInfo } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const slideAnim = useRef(new Animated.Value(250)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -15,7 +24,6 @@ const Header = ({ navigation, options }) => {
   };
 
   const closeSidebar = () => {
-    // Animate both slide and fade out together
     Animated.parallel([
       Animated.spring(slideAnim, {
         toValue: 250,
@@ -25,7 +33,7 @@ const Header = ({ navigation, options }) => {
         toValue: 0,
         duration: 200,
         useNativeDriver: true,
-      })
+      }),
     ]).start(() => {
       setShowSidebar(false);
     });
@@ -33,11 +41,8 @@ const Header = ({ navigation, options }) => {
 
   useEffect(() => {
     if (showSidebar) {
-      // Reset animations when sidebar opens
       slideAnim.setValue(250);
       fadeAnim.setValue(0);
-      
-      // Animate both slide and fade in together
       Animated.parallel([
         Animated.spring(slideAnim, {
           toValue: 0,
@@ -47,21 +52,29 @@ const Header = ({ navigation, options }) => {
           toValue: 1,
           duration: 200,
           useNativeDriver: true,
-        })
+        }),
       ]).start();
     }
   }, [showSidebar]);
 
   return (
     <View style={styles.header}>
+      {options.title !== "Home" && (
+        <TouchableOpacity
+          onPress={() => navigate("Home")}
+          style={[styles.menuButton]}
+        >
+          <MaterialIcons name="arrow-back" size={28} color="black" />
+        </TouchableOpacity>
+      )}
+
       <Text style={styles.title}>{options.title}</Text>
 
-      <TouchableOpacity
-        onPress={openSidebar}
-        style={styles.menuButton}
-      >
+      {options.title === "Home" && (
+        <TouchableOpacity onPress={openSidebar}>
           <MaterialIcons name="menu" size={30} color="black" />
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
 
       <Modal
         visible={showSidebar}
@@ -70,39 +83,39 @@ const Header = ({ navigation, options }) => {
         statusBarTranslucent={true}
       >
         <View style={styles.modalContainer}>
-          <Animated.View 
-            style={[
-              styles.modalOverlay, 
-              { opacity: fadeAnim }
-            ]}
-          >
+          <Animated.View style={[styles.modalOverlay, { opacity: fadeAnim }]}>
             <TouchableOpacity
               style={styles.overlayTouchable}
               onPress={closeSidebar}
               activeOpacity={1}
             />
           </Animated.View>
-          
-          <Animated.View 
-            style={[
-              styles.sidebar, 
-              { transform: [{ translateX: slideAnim }] }
-            ]}
+
+          <Animated.View
+            style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}
           >
             <View style={styles.sidebarContent}>
-                <View  style={{borderColor:Colors.gray,borderWidth:1,borderRadius:10 ,marginTop:-20,padding:10 }}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarInitial}>U</Text>
+              <View
+                style={{
+                  borderColor: Colors.gray,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  marginTop: -20,
+                  padding: 10,
+                }}
+              >
+                <View style={styles.avatar}>
+                  <Text style={styles.avatarInitial}>{userInfo.name.charAt(0).toUpperCase()}</Text>
+                </View>
+                <Text style={styles.name}>{userInfo.name}</Text>
               </View>
-              <Text style={styles.name}>User Name</Text> 
-               </View> 
               <View style={styles.logoutContainer}>
                 <Button
                   title="Logout"
                   onPress={() => {
                     closeSidebar();
 
-                    setTimeout(() => navigation.navigate("Login"), 100);
+                      logoutUser();
                   }}
                   buttonStyle={styles.logoutButton}
                   textStyle={styles.logoutText}
@@ -136,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuButton: {
-    padding: 10,
+    paddingRight: 10,
   },
   menuIcon: {
     fontSize: 24,
