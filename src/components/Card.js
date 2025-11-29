@@ -9,23 +9,24 @@ const cardWidth = (width - (CONTAINER_PADDING * 2) - (CARD_MARGIN * 2)) / 2;
 const Card = ({ item, onPress }) => {
   return (
     <TouchableOpacity 
-      style={[styles.card, { backgroundColor: item.color }]} 
+      style={[styles.card,]} 
       onPress={onPress}
     >
       <View style={styles.iconContainer}>
-        <Text style={styles.icon}>{item.icon}</Text>
+        <Text style={styles.icon}>{item.menu_icon}</Text>
       </View>
-      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.name}>{item.menu_name}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
+    backgroundColor: Colors.background,
     width: cardWidth,
     height: 120, 
     borderRadius: 12,
-    padding: 12,
+    padding: 10,
     margin: CARD_MARGIN,
     alignItems: "center",
     justifyContent: "center",
